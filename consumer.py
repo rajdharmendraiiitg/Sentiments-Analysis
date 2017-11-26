@@ -14,10 +14,10 @@ import topia.termextract
 from topia.termextract import extract
 
 
-ACCESS_KEY="AKIAIGK5O2MQKLS5SZBA"
-SECRET_KEY="NvC7HMMHVVJ8uVCxUZqk9W/KCBF/4sUdfS9fdrAr"
+ACCESS_KEY="Enter Your"
+SECRET_KEY="Enter Your"
 
-REGION="us-west-2"
+REGION="Enter Your"
 
 ####-----------------------------------------------------------------########
 
