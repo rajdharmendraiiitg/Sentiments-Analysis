@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8" />
+  <title>TWITTER SENTIMENT ANALYZER</title>
+   {% load static %}
+  <link id="bootstrap-style" href = "/myapp/static/css/bootstrap.css" rel="stylesheet"/>
+  <link id ="base-style" href="/myapp/static/css/style.css"rel="stylesheet"/>
+  <script src ="/myapp/static/js/jquery-1.11.3.min.js"></script>
+  <script src ="/myapp/static/js/jquery-ui.min.js"></script>
+  <script src="/myapp/static/js/jquery.flot.js"></script>
+  <script src= "/myapp/static/js/jquery.flot.pie.min.js"></script>
+  <script>
+  function showplots(){
+	  var data = [
+	  { label:"Positive",data:{{positivesentiment}}},
+	  { label:"Negative",data:{{negativesentiment}}},
+	  { label:"Neutral",data:{{neutralsentiment}}}
+  };
+  if($("#mipiechart").length)
+  {
+	  $.plot($("#mipiechart"),data,
+	  {
+		  series:{
+			  pie:{
+				  show:true
+			  }
+		  },
+		  grid: {
+			  hoverable:true,
+			  clickable:true
+		  },
+		  legend:{
+			  show:false
+		  },
+		  colors:["#78CD51","#FA5833","#FABB3D","#2FABE9"]
+	  });
+
+	  function pieHover(event,pos,obj)
+	  {
+		  if(!obj)
+		  return;
+
+	   percent = parseFloat(obj.series.percent).toFixed(2);
+	   $("#hover").html('<span style = "font-weight:bold; color:
+	   '+obj.series.color+'">'+obj.series.label+'(+percent+'%)</span>');
+	  }
+	  $("#mipiechart").bind("plothover",pieHover);
+  }
+
+
+  If($("#mihourlychart").length)
+  {
+	  var totaldata = [
+	  {% for key,val in total.items % }
+	  [{{key}},{{val}}],
+	  {$ endfor %}
+	  ];
+	  var positivedata = [
+	  {% for key,val in positive.items % }
+	  [{{key}},{{val}}],
+	  {$ endfor %}
+	  ];
+	  var negativedata = [
+	  {% for key,val in negative.items % }
+	  [{{key}},{{val}}],
+	  {$ endfor %}
+	  ];
+	  var neutraldata = [
+	  {% for key,val in neutral.items % }
+	  [{{key}},{{val}}],
+	  {$ endfor %}
+	  ];
+var plot = $.plot($("#mihourlychart"),
+ [ { data: totaldata,label: "Total Tweets"},
+   { data: positivedata,label: "Positive Tweets"},
+   { data: negativedata,label: "Negative Tweets"},
+   { data: neutraldata,label: "Neutral Tweets"},
+], {
+	series: {
+		lines: {show:true,
+		lineWidth:2
+		},
+	points: {
+		show:true,
+		lineWidth:2
+	},
+	shadowSize: 0
+	},
+	grid : {
+		hoverable: true,
+		clickable: true,
+		tickColor:"#f9f9f9",
+		borderWidth:0
+	},
+	legend: {
+		show:false
+	},
+	colors:["#2FABE9","#74DF00","#FF0000","#eae874"],
+	xaixs:{ticks:15,tickDecimals:0},
+	yaixs:{ticks:15,tickDecimals:0},
+});
+  }
+  }
+  
+</script>
+</head>
+<body bgcolor='aqua' onload = "showplots()">
+<div class= "container-fluid">
+
+<div class= "row-fluid">
+<div id= "content" class "span11">
+<div class ="row-fluid">
+<div class="stats-date span3">
+<!--<div>Last 24 hours statics </div>-->
+</div>
+<div class=" stats span9">
+<div class="stat">
+<div class="left">
+<div class="title"><span class= "color blue"></span>Total Tweets </div>
+<div class="number blue">{{totaltweets}}</div>
+</div></div>
+
+<div class="stat">
+<div class="left">
+<div class="number green">{{positivesentiments}}</div>
+<div class="title"><span class= "color green"></span>Positive </div>
+</div>
+
+<div class ="right">
+<div class ="arrow">
+<i class = "fa-icon-arrow-up green"></i>
+</div>
+<div class="percent">{{pospercent}}%</div>
+</div></div>
+
+<div class="stat">
+<div class="left">
+<div class="number red">{{negativesentiments}}</div>
+<div class="title"><span class= "color red"></span>Negative </div>
+</div>
+
+<div class ="right">
+<div class ="arrow">
+<i class = "fa-icon-arrow-down red"></i>
+</div>
+<div class="percent">{{negpercent}}%</div>
+</div></div>
+
+<div class="stat">
+<div class="left">
+<div class="number red">{{neutralsentiments}}</div>
+<div class="title"><span class= "color red"></span>Neutral</div>
+</div>
+
+<div class ="right">
+<div class ="arrow">
+<i class = "fa-icon-minus yellow"></i>
+</div>
+<div class="percent">{{neutpercent}}%</div>
+<div class ="row-fluid">
+<div class="widget span12">
+<hr/>
+</div>
+<div class ="row-fluid">
+
+</div>
+
+<div class ="row-fluid">
+<div class="widget span6">
+<h2><span class ="glyphicons twitter"><i></i></span>Top User</h2>
+<hr/>
+{% for key, val in toptweets.items %}
+{% if val.4 < 0 %}
+<div class = "task high">
+{%else %}
+{% if val.4 > 0 %}
+<div class = "task low">
+{%else %}
+<div class = "task medium">
+{% endif %}{% endif %}
+ <div class="desc">
+ <a href="http://twitter.com/{{key}}"target="_blank">
+ <!--<div class ="title">{{key}}</div>-->
+ <div>{{val.2}}</div>
+ </div>
+ <div class="time">
+ <div class="date">
+ {% if val.4 < 0 %}
+ <span class="glyphicons thumbs_down"><i></i></span>
+ {% else %}
+{% if val.4 > 0 %}
+ <span class="glyphicons thumbs_up"><i></i></span>
+ {% else %}
+ <span class="glyphicons hand_right"><i></i></span>
+{% endif %}{% endif %}
+</div>
+<!--<div>{{val.3}}&nbsp;retweets</div>-->
+</div>
+</div>
+{% endfor %}
+<div class= "clearfix"></div>
+</div>
+<div class ="widget span3">
+</div>
+<div class ="widget span2">
+<h2><span class= "glyphicons snowflake"><i></i></span>Top hashtags<h2>
+<hr>
+<table class= "table table-striped table-bordered">
+<thead>
+<tr>
+<th>Hashtags</th>
+</tr>
+</thead>
+<tbody>
+{% for key,val in hashtags.items%}
+<tr><td>#{{key}}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div></div></div></div>
+ </body>
+</html>
