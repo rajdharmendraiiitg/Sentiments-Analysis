@@ -8,15 +8,15 @@ import pickle
 
 
 
-ckey="gVFA2Dt05ZOUnE7BeNXHdpyIY"
-csecret="AP4L4B4ivICBZKo8Uj0wuctX29jo3wvMoC3Uvbk0HoSYGe1kM8"
-atoken="787712324748443648-dE134IpGAyHtoRJTruX3bXT6lgBlmRX"
-asecret="ETQWCHxIl5qEiyBt4vLna5QuRxJxhlxqH2ccHEQIYW3Dr"
+ckey="Enter Your"
+csecret="Enter Your"
+atoken="Enter Your"
+asecret="Enter Your"
 
-ACCESS_KEY="AKIAIGK5O2MQKLS5SZBA"
-SECRET_KEY="NvC7HMMHVVJ8uVCxUZqk9W/KCBF/4sUdfS9fdrAr"
+ACCESS_KEY="Enter Your"
+SECRET_KEY="Enter Your"
 
-REGION="us-west-2"
+REGION="Enter Your"
 
 conn = boto.sqs.connect_to_region(REGION,aws_access_key_id=ACCESS_KEY,aws_secret_access_key=SECRET_KEY)
 q= conn.get_all_queues(prefix = 'arsh-queue')
